@@ -15,10 +15,67 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Weapon {
+    id             String          @id @default(cuid())
+    name           String
+    rarityId       String
+    rarity         Rarity          @relation(fields: [rarityId], references: [id])
+    flavorText     String
+    typeId         String
+    type           WeaponType      @relation(fields: [typeId], references: [id])
+    manufacturerId String
+    manufacturer   Manufacturer    @relation(fields: [manufacturerId], references: [id])
+    details        String
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
+    element        Element[]
+    WeaponElement  WeaponElement[]
+
+    @@index([rarityId])
+    @@index([manufacturerId])
+    @@index([typeId])
+}
+
+model Rarity {
+    id      String   @id @default(cuid())
+    name    String
+    weapons Weapon[]
+}
+
+model WeaponType {
+    id      String   @id @default(cuid())
+    name    String
+    weapons Weapon[]
+}
+
+model Manufacturer {
+    id      String   @id @default(cuid())
+    name    String
+    weapons Weapon[]
+}
+
+model Content {
+    id   String @id @default(cuid())
+    name String
+}
+
+model Element {
+    id            String          @id @default(cuid())
+    name          String
+    picture       String
+    weapons       Weapon[]
+    WeaponElement WeaponElement[]
+}
+
+model WeaponElement {
+    weaponId  String
+    weapon    Weapon  @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+    elementId String
+    element   Element @relation(fields: [elementId], references: [id], onDelete: Cascade)
+
+    @@id([weaponId, elementId])
+    @@index([weaponId])
+    @@index([elementId])
 }
 
 // Necessary for Next auth
@@ -28,12 +85,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String?
-    access_token      String?
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String?
+    id_token          String? @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
