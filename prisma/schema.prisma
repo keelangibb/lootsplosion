@@ -16,7 +16,7 @@ datasource db {
 }
 
 model Weapon {
-    id                     Int                @id @default(autoincrement())
+    id                     String             @id @default(cuid())
     name                   String             @unique
     description            String
     Rarity                 Rarity             @relation(fields: [rarityName], references: [name])
@@ -48,7 +48,7 @@ model Weapon {
 }
 
 model DropChance {
-    id         Int    @id @default(autoincrement())
+    id         String @id @default(cuid())
     chance     Float
     Weapon     Weapon @relation(fields: [weaponName], references: [name])
     weaponName String
@@ -62,7 +62,7 @@ model DropChance {
 }
 
 model Rarity {
-    id      Int      @id @default(autoincrement())
+    id      String   @id @default(cuid())
     name    String   @unique
     Weapons Weapon[]
 
@@ -70,7 +70,7 @@ model Rarity {
 }
 
 model WeaponType {
-    id      Int      @id @default(autoincrement())
+    id      String   @id @default(cuid())
     name    String   @unique
     Weapons Weapon[]
 
@@ -78,7 +78,7 @@ model WeaponType {
 }
 
 model Manufacturer {
-    id      Int      @id @default(autoincrement())
+    id      String   @id @default(cuid())
     name    String   @unique
     Weapons Weapon[]
 
@@ -87,7 +87,7 @@ model Manufacturer {
 
 // Boss, quest, vendor, chest, etc
 model SourceType {
-    id      Int      @id @default(autoincrement())
+    id      String   @id @default(cuid())
     name    String   @unique
     Sources Source[]
 
@@ -95,7 +95,7 @@ model SourceType {
 }
 
 model Source {
-    id             Int          @id @default(autoincrement())
+    id             String       @id @default(cuid())
     name           String       @unique
     description    String
     picture        String
@@ -112,7 +112,7 @@ model Source {
 
 // Location of the source a ie. the map
 model Location {
-    id          Int      @id @default(autoincrement())
+    id          String   @id @default(cuid())
     name        String   @unique
     description String?
     picture     String
@@ -127,7 +127,7 @@ model Location {
 
 // Base game or DLC
 model Content {
-    id        Int        @id @default(autoincrement())
+    id        String     @id @default(cuid())
     name      String     @unique
     Weapons   Weapon[]
     Sources   Source[]
@@ -137,7 +137,7 @@ model Content {
 }
 
 model ElementCombination {
-    id       Int       @id @default(autoincrement())
+    id       String    @id @default(cuid())
     name     String    @unique
     Elements Element[]
     Weapons  Weapon[]
@@ -146,7 +146,7 @@ model ElementCombination {
 }
 
 model Element {
-    id                 Int                  @id @default(autoincrement())
+    id                 String               @id @default(cuid())
     name               String               @unique
     picture            String
     ElementCombination ElementCombination[]

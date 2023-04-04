@@ -8,9 +8,6 @@ export const weaponsRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.weapon.findMany({
       include: {
-        // rarity: { select: { name: true } },
-        // type: { select: { name: true } },
-        // manufacturer: { select: { name: true } },
         ElementCombination: {
           select: {
             Elements: {
@@ -18,11 +15,7 @@ export const weaponsRouter = createTRPCRouter({
             },
           },
         },
-        // content: { select: { name: true } },
-        Sources: true,
-        DropChances: {
-          include: { Source: { select: { name: true, DropChance: true } } },
-        },
+        Sources: { select: { id: true, name: true } },
       },
     });
   }),
@@ -30,6 +23,16 @@ export const weaponsRouter = createTRPCRouter({
   getById: publicProcedure.input(getByIdSchema).query(({ ctx, input }) => {
     return ctx.prisma.weapon.findUnique({
       where: { id: input.weaponId },
+      include: {
+        ElementCombination: {
+          select: {
+            Elements: {
+              select: { name: true, picture: true },
+            },
+          },
+        },
+        Sources: { select: { id: true, name: true } },
+      },
     });
   }),
 
@@ -40,8 +43,4 @@ export const weaponsRouter = createTRPCRouter({
         where: { id: input.manufacturerId },
       });
     }),
-
-  getRarity: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.rarity.findMany();
-  }),
 });

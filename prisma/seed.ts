@@ -224,6 +224,15 @@ async function main() {
       Content: { connect: { name: "Pirate's Booty" } },
       Location: {},
     },
+    {
+      name: "Big Sleep",
+      description: `Big Sleep is a story Boss of the "Captain Scarlett and Her Pirate's Booty" DLC. He is Sandman's Bodyguard.`,
+      SourceType: { connect: { name: "Boss" } },
+      picture:
+        "https://global-uploads.webflow.com/5ff36780a1084987868ce198/603433b82a29668be2a0b503_Big-Sleep.jpg",
+      Content: { connect: { name: "Pirate's Booty" } },
+      Location: {},
+    },
   ];
   const createSources = sources.map((source) => {
     return prisma.source.upsert({
@@ -251,6 +260,14 @@ async function main() {
       Content: { connect: { name: "Pirate's Booty" } },
       Sources: { connect: { name: "Seraph Vendor" } },
     },
+    {
+      name: "Hayter's Folly",
+      picture:
+        "https://global-uploads.webflow.com/5ff36780a1084987868ce198/601f1040c5874c49b7045508_Hayter%27s-Folly.jpg",
+      map: "https://global-uploads.webflow.com/5ff36780a1084987868ce198/61843cae1880f00f62c58abe_Hayter_s%20Folly.png",
+      Content: { connect: { name: "Pirate's Booty" } },
+      Sources: { connect: { name: "Big Sleep" } },
+    },
   ];
   const createLocations = locations.map((location) => {
     return prisma.location.upsert({
@@ -262,6 +279,23 @@ async function main() {
     });
   });
   const weapons = [
+    {
+      name: "12 Pounder",
+      description: `Fires a Cannonball in an arching trajectory. The Cannonball explodes when it hits an enemy or ricochets of the first surface and explodes when it hits a second surface.`,
+      Rarity: { connect: { name: "Blue" } },
+      flavorText: "Nec pluribus impar, bitches.",
+      Type: { connect: { name: "Launcher" } },
+      Manufacturer: { connect: { name: "Torgue" } },
+      ElementCombination: {
+        connect: { name: "Explosive" },
+      },
+      Content: { connect: { name: "Base Game" } },
+      Sources: { connect: [{ name: "Big Sleep" }] },
+      picture:
+        "https://global-uploads.webflow.com/5ff36780a1084987868ce198/5ff36780a10849e28f8d011a_12-Pounder-BL2.png",
+      picture2:
+        "https://global-uploads.webflow.com/5ff36780a1084987868ce198/5ff36780a1084936378cfe6c_12-Pounder-BL2.png",
+    },
     {
       name: "Actualizer",
       description: "Slower bullet speed.",
@@ -301,6 +335,11 @@ async function main() {
       Source: { connect: { name: "Seraph Vendor" } },
       Weapon: { connect: { name: "Actualizer" } },
     },
+    {
+      chance: 33,
+      Source: { connect: { name: "Big Sleep" } },
+      Weapon: { connect: { name: "12 Pounder" } },
+    },
   ];
   const createDropChances = dropChances.map((dropChance, i) => {
     return prisma.dropChance.upsert({
@@ -314,6 +353,7 @@ async function main() {
       update: {},
     });
   });
+
   await Promise.all(createElements);
   await Promise.all(createElementCombinations);
   await Promise.all(createManufacturers);
