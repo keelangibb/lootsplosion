@@ -1,12 +1,12 @@
 import { type NextPage } from "next";
-import { api } from "~/utils/api";
+import WeaponsCard from "~/components/WeaponsCard";
 
 const Home: NextPage = () => {
-  const { data: weapons } = api.weapons.getAll.useQuery();
-  console.log(weapons);
+  // BEFORE
   return (
     <div>
       <h1>Home</h1>
+      <WeaponsCard></WeaponsCard>
     </div>
   );
 };

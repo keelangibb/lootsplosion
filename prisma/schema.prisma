@@ -16,61 +16,142 @@ datasource db {
 }
 
 model Weapon {
-    id                   String             @id @default(cuid())
-    name                 String
-    rarity               Rarity             @relation(fields: [rarityId], references: [id])
-    rarityId             String
-    flavorText           String
-    type                 WeaponType         @relation(fields: [typeId], references: [id])
-    typeId               String
-    manufacturer         Manufacturer       @relation(fields: [manufacturerId], references: [id])
-    manufacturerId       String
-    elementCombination   ElementCombination @relation(fields: [elementCombinationId], references: [id])
-    elementCombinationId String
-    details              String
-    createdAt            DateTime           @default(now())
-    updatedAt            DateTime           @updatedAt
+    id                     Int                @id @default(autoincrement())
+    name                   String             @unique
+    description            String
+    Rarity                 Rarity             @relation(fields: [rarityName], references: [name])
+    rarityName             String
+    flavorText             String
+    Type                   WeaponType         @relation(fields: [typeName], references: [name])
+    typeName               String
+    Manufacturer           Manufacturer       @relation(fields: [manufacturerName], references: [name])
+    manufacturerName       String
+    ElementCombination     ElementCombination @relation(fields: [elementCombinationName], references: [name])
+    elementCombinationName String
+    Content                Content            @relation(fields: [contentName], references: [name])
+    contentName            String
+    Sources                Source[]
+    DropChances            DropChance[]
+    picture                String
+    picture2               String
+    weaponCode             String?
 
-    @@index([rarityId])
-    @@index([manufacturerId])
-    @@index([typeId])
-    @@index([elementCombinationId])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([elementCombinationName])
+    @@index([contentName])
+    @@index([name])
+    @@index([rarityName])
+    @@index([typeName])
+    @@index([manufacturerName])
+}
+
+model DropChance {
+    id         Int    @id @default(autoincrement())
+    chance     Float
+    Weapon     Weapon @relation(fields: [weaponName], references: [name])
+    weaponName String
+    Source     Source @relation(fields: [sourceName], references: [name])
+    sourceName String
+
+    @@unique([weaponName, sourceName])
+    @@index([weaponName, sourceName])
+    @@index([weaponName])
+    @@index([sourceName])
 }
 
 model Rarity {
-    id      String   @id @default(cuid())
-    name    String
-    weapons Weapon[]
+    id      Int      @id @default(autoincrement())
+    name    String   @unique
+    Weapons Weapon[]
+
+    @@index([name])
 }
 
 model WeaponType {
-    id      String   @id @default(cuid())
-    name    String
-    weapons Weapon[]
+    id      Int      @id @default(autoincrement())
+    name    String   @unique
+    Weapons Weapon[]
+
+    @@index([name])
 }
 
 model Manufacturer {
-    id      String   @id @default(cuid())
-    name    String
-    weapons Weapon[]
+    id      Int      @id @default(autoincrement())
+    name    String   @unique
+    Weapons Weapon[]
+
+    @@index([name])
 }
 
+// Boss, quest, vendor, chest, etc
+model SourceType {
+    id      Int      @id @default(autoincrement())
+    name    String   @unique
+    Sources Source[]
+
+    @@index([name])
+}
+
+model Source {
+    id             Int          @id @default(autoincrement())
+    name           String       @unique
+    description    String
+    picture        String
+    Location       Location[]
+    SourceType     SourceType   @relation(fields: [sourceTypeName], references: [name])
+    sourceTypeName String
+    Content        Content[]
+    Weapons        Weapon[]
+    DropChance     DropChance[]
+
+    @@index([sourceTypeName])
+    @@index([name])
+}
+
+// Location of the source a ie. the map
+model Location {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    description String?
+    picture     String
+    map         String
+    Sources     Source[]
+    Content     Content  @relation(fields: [contentName], references: [name])
+    contentName String
+
+    @@index([contentName])
+    @@index([name])
+}
+
+// Base game or DLC
 model Content {
-    id   String @id @default(cuid())
-    name String
+    id        Int        @id @default(autoincrement())
+    name      String     @unique
+    Weapons   Weapon[]
+    Sources   Source[]
+    Locations Location[]
+
+    @@index([name])
 }
 
 model ElementCombination {
-    id       String    @id @default(cuid())
-    elements Element[]
-    weapon   Weapon[]
+    id       Int       @id @default(autoincrement())
+    name     String    @unique
+    Elements Element[]
+    Weapons  Weapon[]
+
+    @@index([name])
 }
 
 model Element {
-    id                 String               @id @default(cuid())
-    name               String
+    id                 Int                  @id @default(autoincrement())
+    name               String               @unique
     picture            String
-    elementCombination ElementCombination[]
+    ElementCombination ElementCombination[]
+
+    @@index([name])
 }
 
 // Necessary for Next auth
