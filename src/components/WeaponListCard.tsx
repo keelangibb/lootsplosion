@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import Elements, { type Weapon } from "./Elements";
-
+import type { RouterOutputs } from "~/utils/api";
+import Elements from "./Elements";
+type Weapon = RouterOutputs["weapons"]["getAll"][0];
 export default function WeaponListCard(props: Weapon) {
   return (
     <tr className="hover text-center">
@@ -24,7 +25,7 @@ export default function WeaponListCard(props: Weapon) {
       <td>{props.typeName}</td>
       <td>{props.manufacturerName}</td>
       <td>
-        <Elements {...props} />
+        <Elements elements={props.Elements} />
       </td>
       <td>{props.contentName}</td>
       <td>

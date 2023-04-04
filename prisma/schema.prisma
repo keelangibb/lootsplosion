@@ -16,30 +16,28 @@ datasource db {
 }
 
 model Weapon {
-    id                     String             @id @default(cuid())
-    name                   String             @unique
-    description            String
-    Rarity                 Rarity             @relation(fields: [rarityName], references: [name])
-    rarityName             String
-    flavorText             String
-    Type                   WeaponType         @relation(fields: [typeName], references: [name])
-    typeName               String
-    Manufacturer           Manufacturer       @relation(fields: [manufacturerName], references: [name])
-    manufacturerName       String
-    ElementCombination     ElementCombination @relation(fields: [elementCombinationName], references: [name])
-    elementCombinationName String
-    Content                Content            @relation(fields: [contentName], references: [name])
-    contentName            String
-    Sources                Source[]
-    DropChances            DropChance[]
-    picture                String
-    picture2               String
-    weaponCode             String?
+    id               String       @id @default(cuid())
+    name             String       @unique
+    description      String
+    Rarity           Rarity       @relation(fields: [rarityName], references: [name])
+    rarityName       String
+    flavorText       String
+    Type             WeaponType   @relation(fields: [typeName], references: [name])
+    typeName         String
+    Manufacturer     Manufacturer @relation(fields: [manufacturerName], references: [name])
+    manufacturerName String
+    Content          Content      @relation(fields: [contentName], references: [name])
+    contentName      String
+    Sources          Source[]
+    DropChances      DropChance[]
+    Elements         Element[]
+    picture          String
+    picture2         String
+    weaponCode       String?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([elementCombinationName])
     @@index([contentName])
     @@index([name])
     @@index([rarityName])
@@ -136,20 +134,11 @@ model Content {
     @@index([name])
 }
 
-model ElementCombination {
-    id       String    @id @default(cuid())
-    name     String    @unique
-    Elements Element[]
-    Weapons  Weapon[]
-
-    @@index([name])
-}
-
 model Element {
-    id                 String               @id @default(cuid())
-    name               String               @unique
-    picture            String
-    ElementCombination ElementCombination[]
+    id      String   @id @default(cuid())
+    name    String   @unique
+    picture String
+    Weapons Weapon[]
 
     @@index([name])
 }

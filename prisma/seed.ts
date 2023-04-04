@@ -43,72 +43,6 @@ async function main() {
       update: {},
     });
   });
-  const elementCombinations = [
-    { name: "Corrosive", Elements: { connect: [{ name: "Corrosive" }] } },
-    { name: "Explosive", Elements: { connect: [{ name: "Explosive" }] } },
-    { name: "Fire", Elements: { connect: [{ name: "Fire" }] } },
-    {
-      name: "Non Elemental",
-      Elements: { connect: [{ name: "Non Elemental" }] },
-    },
-    { name: "Shock", Elements: { connect: [{ name: "Shock" }] } },
-    { name: "Slag", Elements: { connect: [{ name: "Slag" }] } },
-    {
-      name: "Fire, Shock, Corrosive, Slag",
-      Elements: {
-        connect: [
-          { name: "Fire" },
-          { name: "Shock" },
-          { name: "Corrosive" },
-          { name: "Slag" },
-        ],
-      },
-    },
-    {
-      name: "Fire, Shock, Corrosive, Slag, Explosive",
-      Elements: {
-        connect: [
-          { name: "Fire" },
-          { name: "Shock" },
-          { name: "Corrosive" },
-          { name: "Slag" },
-          { name: "Explosive" },
-        ],
-      },
-    },
-    {
-      name: "Non Elemental, Fire, Shock, Corrosive",
-      Elements: {
-        connect: [
-          { name: "Non Elemental" },
-          { name: "Fire" },
-          { name: "Shock" },
-          { name: "Corrosive" },
-        ],
-      },
-    },
-    {
-      name: "Non Elemental, Fire, Shock, Corrosive, Slag",
-      Elements: {
-        connect: [
-          { name: "Non Elemental" },
-          { name: "Fire" },
-          { name: "Shock" },
-          { name: "Corrosive" },
-          { name: "Slag" },
-        ],
-      },
-    },
-  ];
-  const createElementCombinations = elementCombinations.map((element) => {
-    return prisma.elementCombination.upsert({
-      where: {
-        name: element.name,
-      },
-      create: element,
-      update: {},
-    });
-  });
   const manufacturers = [
     "Bandit",
     "DAHL",
@@ -286,15 +220,13 @@ async function main() {
       flavorText: "Nec pluribus impar, bitches.",
       Type: { connect: { name: "Launcher" } },
       Manufacturer: { connect: { name: "Torgue" } },
-      ElementCombination: {
-        connect: { name: "Explosive" },
-      },
       Content: { connect: { name: "Base Game" } },
       Sources: { connect: [{ name: "Big Sleep" }] },
       picture:
         "https://global-uploads.webflow.com/5ff36780a1084987868ce198/5ff36780a10849e28f8d011a_12-Pounder-BL2.png",
       picture2:
         "https://global-uploads.webflow.com/5ff36780a1084987868ce198/5ff36780a1084936378cfe6c_12-Pounder-BL2.png",
+      Elements: { connect: { name: "Explosive" } },
     },
     {
       name: "Actualizer",
@@ -303,9 +235,6 @@ async function main() {
       flavorText: "We need to talk about your DPS report.",
       Type: { connect: { name: "SMG" } },
       Manufacturer: { connect: { name: "Hyperion" } },
-      ElementCombination: {
-        connect: { name: "Non Elemental, Fire, Shock, Corrosive, Slag" },
-      },
       Content: { connect: { name: "Pirate's Booty" } },
       Sources: { connect: [{ name: "Hyperius" }, { name: "Seraph Vendor" }] },
       DropChances: {},
@@ -313,6 +242,15 @@ async function main() {
         "https://global-uploads.webflow.com/5ff36780a1084987868ce198/5ff36780a10849738e8d0168_Actualizer-BL2.png",
       picture2:
         "https://global-uploads.webflow.com/5ff36780a1084987868ce198/5ff36780a108495c648cfebb_Actualizer-BL2.png",
+      Elements: {
+        connect: [
+          { name: "Non Elemental" },
+          { name: "Fire" },
+          { name: "Shock" },
+          { name: "Corrosive" },
+          { name: "Slag" },
+        ],
+      },
     },
   ];
   const createWeapons = weapons.map((weapon) => {
@@ -355,7 +293,6 @@ async function main() {
   });
 
   await Promise.all(createElements);
-  await Promise.all(createElementCombinations);
   await Promise.all(createManufacturers);
   await Promise.all(createWeaponTypes);
   await Promise.all(createRarities);
