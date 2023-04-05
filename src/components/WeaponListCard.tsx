@@ -1,42 +1,73 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { RouterOutputs } from "~/utils/api";
+import { api } from "~/utils/api";
 import Elements from "./Elements";
-type Weapon = RouterOutputs["weapons"]["getAll"][0];
-export default function WeaponListCard(props: Weapon) {
+export default function WeaponListCard() {
+  const { data: weapons } = api.weapons.getAll.useQuery();
+  const { data: elements } = api.elements.getAll.useQuery();
+
+  if (!weapons || !elements) return null;
   return (
-    <tr className="hover text-center">
-      <td>
-        <Image
-          key={props.id}
-          src={props.picture}
-          width={72}
-          height={72}
-          alt={props.name}
-          loading="lazy"
-          className="h-auto w-auto"
-        />
-      </td>
-      <td>
-        <Link className={`btn ${props.rarityName}`} href={`weapon/${props.id}`}>
-          {props.name}
-        </Link>
-      </td>
-      <td>{props.typeName}</td>
-      <td>{props.manufacturerName}</td>
-      <td>
-        <Elements elements={props.Elements} />
-      </td>
-      <td>{props.contentName}</td>
-      <td>
-        <div className={`grid grid-cols-${props.Sources.length} gap-2`}>
-          {props.Sources.map((source) => (
-            <button key={source.id} className="btn">
-              {source.name}
-            </button>
-          ))}
-        </div>
-      </td>
-    </tr>
+    <div className="mt-4">
+      <div className="w-full overflow-x-auto">
+        <table className="table w-full">
+          <thead>
+            <tr className="text-center">
+              <th></th>
+              <th>Rarity</th>
+              <th>Name</th>
+              <th>Weapon Type</th>
+              <th>Manufacturer</th>
+              <th>Elements</th>
+              <th>Content</th>
+              <th>Sources</th>
+            </tr>
+          </thead>
+          <tbody>
+            {weapons.map((weapon, i) => (
+              <tr key={weapon.id} className="hover text-center">
+                <th>{i + 1}</th>
+                <td>
+                  <Image
+                    key={weapon.id}
+                    src={weapon.picture}
+                    width={72}
+                    height={72}
+                    alt={weapon.name}
+                    loading="lazy"
+                    className="h-auto w-auto"
+                  />
+                </td>
+                <td>
+                  <Link
+                    className={`btn ${weapon.rarityName}`}
+                    href={`weapon/${weapon.id}`}
+                  >
+                    {weapon.name}
+                  </Link>
+                </td>
+                <td>{weapon.typeName}</td>
+                <td>{weapon.manufacturerName}</td>
+                <td>
+                  <Elements elements={weapon.Elements} />
+                </td>
+                <td>{weapon.contentName}</td>
+                <td>
+                  {weapon.Sources.map((source) => (
+                    <Link
+                      key={source.id}
+                      href={`source/${source.id}`}
+                      className="btn mx-1"
+                    >
+                      {source.name}
+                    </Link>
+                  ))}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
