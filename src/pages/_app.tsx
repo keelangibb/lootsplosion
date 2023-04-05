@@ -4,6 +4,7 @@ import { type AppType } from "next/app";
 
 import { api } from "~/utils/api";
 
+import NavBar from "~/components/NavBar";
 import "~/styles/globals.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -12,7 +13,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <NavBar />
+      <div className="container mx-auto px-4" data-theme="halloween">
+        <Component {...pageProps} />
+      </div>
     </SessionProvider>
   );
 };
