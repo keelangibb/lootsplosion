@@ -9,7 +9,15 @@ const Home: NextPage = () => {
   if (!userIsLoaded) return <div />;
   return (
     <PageLayout>
-      {userIsSignedIn ? <SignOutButton /> : <SignInButton />}
+      {userIsSignedIn ? (
+        <SignOutButton>
+          <button className="btn">Sign out</button>
+        </SignOutButton>
+      ) : (
+        <SignInButton mode="modal">
+          <button className="btn">Sign in</button>
+        </SignInButton>
+      )}
       <WeaponListCard />
     </PageLayout>
   );
