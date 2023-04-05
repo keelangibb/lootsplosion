@@ -6,6 +6,6 @@ import { prisma } from "~/server/db";
 export const generateSSGHelper = () =>
   createProxySSGHelpers({
     router: appRouter,
-    ctx: { prisma, session: null},
+    ctx: { prisma, userId: null },
     transformer: superjson, // optional - adds superjson serialization
   });

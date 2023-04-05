@@ -1,23 +1,15 @@
-import { type Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 
 import { api } from "~/utils/api";
 
-import NavBar from "~/components/NavBar";
+import { ClerkProvider } from "@clerk/nextjs";
 import "~/styles/globals.css";
 
-const MyApp: AppType<{ session: Session | null }> = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
+const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <SessionProvider session={session}>
-      <NavBar />
-      <div className="container mx-auto px-4" data-theme="halloween">
-        <Component {...pageProps} />
-      </div>
-    </SessionProvider>
+    <ClerkProvider {...pageProps}>
+      <Component {...pageProps} />
+    </ClerkProvider>
   );
 };
 
