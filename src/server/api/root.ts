@@ -1,6 +1,7 @@
 import { weaponsRouter } from "~/server/api/routers/weapons";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { elementsRouter } from "./routers/elements";
+import { sourcesRouter } from "./routers/sources";
 
 /**
  * This is the primary router for your server.
@@ -10,6 +11,7 @@ import { elementsRouter } from "./routers/elements";
 export const appRouter = createTRPCRouter({
   weapons: weaponsRouter,
   elements: elementsRouter,
+  sources: sourcesRouter,
 });
 
 // export type definition of API
