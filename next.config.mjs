@@ -8,7 +8,11 @@
 const config = {
   reactStrictMode: true,
   images: {
-    domains: ["global-uploads.webflow.com"],
+    domains: [
+      "global-uploads.webflow.com",
+      "images.clerk.dev",
+      // "tailwindui.com",
+    ],
   },
   /**
    * If you have the "experimental: { appDir: true }" setting enabled, then you
