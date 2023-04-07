@@ -8,10 +8,10 @@ export const weaponsRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.weapon.findMany({
       include: {
-        Elements: {
+        elements: {
           select: { name: true },
         },
-        Sources: { select: { id: true, name: true } },
+        sources: { select: { id: true, name: true } },
       },
     });
   }),
@@ -20,10 +20,10 @@ export const weaponsRouter = createTRPCRouter({
     return ctx.prisma.weapon.findUnique({
       where: { id: input.weaponId },
       include: {
-        Elements: {
+        elements: {
           select: { name: true },
         },
-        Sources: { select: { id: true } },
+        sources: { select: { id: true } },
       },
     });
   }),

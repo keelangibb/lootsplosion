@@ -11,7 +11,7 @@ export default function Elements({ elements }: { elements: ElementsList }) {
       {elements.map((element, i) => (
         <Image
           key={element.name}
-          src={data[i]?.picture ?? ""}
+          src={data[i]?.image ?? ""}
           width={18}
           height={18}
           alt={element.name}

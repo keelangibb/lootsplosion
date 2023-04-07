@@ -5,6 +5,63 @@ generator client {
     provider = "prisma-client-js"
 }
 
+enum Rarity {
+    White
+    Green
+    Blue
+    Purple
+    ETech
+    Legendary
+    Seraph
+    Pearlescent
+    Effervescent
+}
+
+enum WeaponType {
+    Assault_Rifle @map("Assault Rifle")
+    Launcher
+    Pistol
+    Shotgun
+    SMG
+    Sniper_Rifle  @map("Sniper Rifle")
+}
+
+enum Manufacturer {
+    Bandit
+    DAHL
+    Hyperion
+    Jakobs
+    Maliwan
+    Tediore
+    Torgue
+    Vladof
+}
+
+// Base game or DLC
+enum Content {
+    Base_Game              @map("Base Game")
+    Big_Game_Hunt          @map("Big Game Hunt")
+    Campaign_Of_Carnage    @map("Campaign of Carnage")
+    Data_Mined             @map("Data Mined")
+    Digistruct_Peak        @map("Digistruct Peak")
+    Assault_On_Dragon_Keep @map("Assault on Dragon Keep")
+    Fight_For_Sanctuary    @map("Fight for Sanctuary")
+    Pirates_Booty          @map("Pirates Booty")
+    Slaughterdome
+    Upgrade_Pack_1         @map("Upgrade Pack 1")
+}
+
+enum SourceType {
+    Boss
+    Quest
+    Vendor
+    Chest
+    Raid_Boss    @map("Raid Boss")
+    Named_Enemy  @map("Named Enemy")
+    World_Drop   @map("World Drop")
+    Unobtainable
+}
+
 datasource db {
     provider     = "mysql"
     // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
@@ -16,41 +73,30 @@ datasource db {
 }
 
 model Weapon {
-    id               String       @id @default(cuid())
-    name             String       @unique
-    description      String
-    Rarity           Rarity       @relation(fields: [rarityName], references: [name])
-    rarityName       String
-    flavorText       String
-    Type             WeaponType   @relation(fields: [typeName], references: [name])
-    typeName         String
-    Manufacturer     Manufacturer @relation(fields: [manufacturerName], references: [name])
-    manufacturerName String
-    Content          Content      @relation(fields: [contentName], references: [name])
-    contentName      String
-    Sources          Source[]
-    DropChances      DropChance[]
-    Elements         Element[]
-    picture          String
-    picture2         String
-    weaponCode       String?
+    id           String       @id @default(cuid())
+    name         String       @unique
+    description  String
+    flavorText   String
+    rarity       Rarity
+    type         WeaponType
+    manufacturer Manufacturer
+    content      Content // Denormalized because a weapon can be obtained from the base game and DLC, but it still makes it a base game weapon
+    sources      Source[]
+    elements     Element[]
+    dropChance   DropChance[]
+    image        String
+    mapImage     String
+    weaponCode   String?
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([contentName])
     @@index([name])
-    @@index([rarityName])
-    @@index([typeName])
-    @@index([manufacturerName])
 }
 
 model DropChance {
     id         String @id @default(cuid())
     chance     Float
-    Weapon     Weapon @relation(fields: [weaponName], references: [name])
+    weapon     Weapon @relation(fields: [weaponName], references: [name])
     weaponName String
-    Source     Source @relation(fields: [sourceName], references: [name])
+    source     Source @relation(fields: [sourceName], references: [name])
     sourceName String
 
     @@unique([weaponName, sourceName])
@@ -59,77 +105,29 @@ model DropChance {
     @@index([sourceName])
 }
 
-model Rarity {
-    id      String   @id @default(cuid())
-    name    String   @unique
-    Weapons Weapon[]
-
-    @@index([name])
-}
-
-model WeaponType {
-    id      String   @id @default(cuid())
-    name    String   @unique
-    Weapons Weapon[]
-
-    @@index([name])
-}
-
-model Manufacturer {
-    id      String   @id @default(cuid())
-    name    String   @unique
-    Weapons Weapon[]
-
-    @@index([name])
-}
-
-// Boss, quest, vendor, chest, etc
-model SourceType {
-    id      String   @id @default(cuid())
-    name    String   @unique
-    Sources Source[]
-
-    @@index([name])
-}
-
 model Source {
-    id             String       @id @default(cuid())
-    name           String       @unique
-    description    String
-    picture        String
-    Location       Location[]
-    SourceType     SourceType   @relation(fields: [sourceTypeName], references: [name])
-    sourceTypeName String
-    Content        Content[]
-    Weapons        Weapon[]
-    DropChance     DropChance[]
+    id          String       @id @default(cuid())
+    name        String       @unique
+    type        SourceType
+    description String
+    image       String
+    weapons     Weapon[]
+    dropChance  DropChance[]
+    location    Location[]
 
-    @@index([sourceTypeName])
     @@index([name])
+    @@index([type])
 }
 
 // Location of the source a ie. the map
 model Location {
     id          String   @id @default(cuid())
     name        String   @unique
+    content     Content
     description String?
-    picture     String
-    map         String
-    Sources     Source[]
-    Content     Content  @relation(fields: [contentName], references: [name])
-    contentName String
-
-    @@index([contentName])
-    @@index([name])
-}
-
-// Base game or DLC
-model Content {
-    id        String     @id @default(cuid())
-    name      String     @unique
-    Weapons   Weapon[]
-    Sources   Source[]
-    Locations Location[]
+    image       String
+    mapImage    String
+    sources     Source[]
 
     @@index([name])
 }
@@ -137,8 +135,8 @@ model Content {
 model Element {
     id      String   @id @default(cuid())
     name    String   @unique
-    picture String
-    Weapons Weapon[]
+    image   String
+    weapons Weapon[]
 
     @@index([name])
 }
