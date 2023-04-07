@@ -8,7 +8,7 @@ export default function WeaponListCard() {
 
   if (!weapons || !elements) return null;
   return (
-    <div className="mt-4">
+    <div>
       <div className="w-full overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -30,7 +30,7 @@ export default function WeaponListCard() {
                 <td>
                   <Image
                     key={weapon.id}
-                    src={weapon.picture}
+                    src={weapon.image}
                     width={72}
                     height={72}
                     alt={weapon.name}
@@ -40,23 +40,23 @@ export default function WeaponListCard() {
                 </td>
                 <td>
                   <Link
-                    className={`btn ${weapon.rarityName}`}
-                    href={`weapon/${weapon.id}`}
+                    className={`btn ${weapon.rarity}`}
+                    href={`weapons/${weapon.id}`}
                   >
                     {weapon.name}
                   </Link>
                 </td>
-                <td>{weapon.typeName}</td>
-                <td>{weapon.manufacturerName}</td>
+                <td>{weapon.type}</td>
+                <td>{weapon.manufacturer}</td>
                 <td>
-                  <Elements elements={weapon.Elements} />
+                  <Elements elements={weapon.elements} />
                 </td>
-                <td>{weapon.contentName}</td>
+                <td>{weapon.content}</td>
                 <td>
-                  {weapon.Sources.map((source) => (
+                  {weapon.sources.map((source) => (
                     <Link
                       key={source.id}
-                      href={`source/${source.id}`}
+                      href={`sources/${source.id}`}
                       className="btn mx-1"
                     >
                       {source.name}
