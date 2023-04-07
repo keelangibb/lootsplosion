@@ -9,8 +9,6 @@ export default {
       },
     },
   },
-  daisyui: {
-    themes: ["halloween"],
-  },
-  plugins: [require("daisyui"), require("@tailwindcss/forms")],
+
+  plugins: [require("@tailwindcss/forms")],
 } satisfies Config;

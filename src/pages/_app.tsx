@@ -1,7 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { type AppType } from "next/app";
 import Head from "next/head";
-import { PageLayout } from "~/components/PageLayout";
+import PageLayout from "~/components/PageLayout";
 import "~/styles/globals.css";
 import { api } from "~/utils/api";
 

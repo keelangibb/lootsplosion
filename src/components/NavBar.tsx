@@ -10,56 +10,66 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function NavBar() {
   const { isLoaded, isSignedIn, user } = useUser();
   if (!isLoaded) return null;
 
+  const navLinks = [
+    {
+      name: "Weapons",
+      href: "/weapons",
+    },
+    {
+      name: "Shields",
+      href: "/shields",
+    },
+    {
+      name: "Grenades",
+      href: "/grenades",
+    },
+    {
+      name: "Class Mods",
+      href: "/class-mods",
+    },
+    {
+      name: "Relics",
+      href: "/relics",
+    },
+  ];
+
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="mb-4 bg-gray-800">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="flex items-center px-2 lg:px-0">
                 <div className="flex-shrink-0">
-                  <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
+                  <Link href="/">
+                    <img
+                      className="block h-8 w-auto lg:hidden"
+                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                      alt="Your Company"
+                    />
+                    <img
+                      className="hidden h-8 w-auto lg:block"
+                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                      alt="Your Company"
+                    />
+                  </Link>
                 </div>
                 <div className="hidden lg:ml-6 lg:block">
                   <div className="flex space-x-4">
                     {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                    <a
-                      href="#"
-                      className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
-                    >
-                      Dashboard
-                    </a>
-                    <a
-                      href="#"
-                      className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                    >
-                      Team
-                    </a>
-                    <a
-                      href="#"
-                      className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                    >
-                      Projects
-                    </a>
-                    <a
-                      href="#"
-                      className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                    >
-                      Calendar
-                    </a>
+                    {navLinks.map((link) => (
+                      <Link
+                        key={link.name}
+                        href={link.href}
+                        className="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-white"
+                      >
+                        {link.name}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -132,7 +142,7 @@ export default function Example() {
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
                           {({ active }) => (
-                            <a
+                            <Link
                               href="#"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
@@ -140,12 +150,12 @@ export default function Example() {
                               )}
                             >
                               Your Profile
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
+                            <Link
                               href="#"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
@@ -153,12 +163,12 @@ export default function Example() {
                               )}
                             >
                               Settings
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
+                            <Link
                               href="#"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
@@ -166,7 +176,7 @@ export default function Example() {
                               )}
                             >
                               Sign out
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       </Menu.Items>
@@ -176,38 +186,19 @@ export default function Example() {
               </div>
             </div>
           </div>
-
           <Disclosure.Panel className="lg:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
               {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-              <Disclosure.Button
-                as={Link}
-                href="#"
-                className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
-              >
-                Dashboard
-              </Disclosure.Button>
-              <Disclosure.Button
-                as={Link}
-                href="#"
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >
-                Team
-              </Disclosure.Button>
-              <Disclosure.Button
-                as={Link}
-                href="#"
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >
-                Projects
-              </Disclosure.Button>
-              <Disclosure.Button
-                as={Link}
-                href="#"
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >
-                Calendar
-              </Disclosure.Button>
+              {navLinks.map((link) => (
+                <Disclosure.Button
+                  key={link.name}
+                  as={Link}
+                  href={link.href}
+                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                >
+                  {link.name}
+                </Disclosure.Button>
+              ))}
             </div>
             <div className="border-t border-gray-700 pb-3 pt-4">
               <div className="flex items-center px-5">
