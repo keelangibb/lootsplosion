@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.15.0",
+    "@clerk/nextjs": "^4.29.3",
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.17",
     "@prisma/client": "^4.11.0",
